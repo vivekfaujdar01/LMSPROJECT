@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - LibraryHub</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .main-content {
+            flex: 1 0 auto;
+        }
+        .contact-container {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            width: 100%;
+            max-width: 36rem;
+            transition: transform 0.3s ease;
+            margin: 2rem auto;
+        }
+        .contact-container:hover {
+            transform: translateY(-5px);
+        }
+        .input-field, .textarea-field {
+            border: 2px solid #e5e7eb;
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            width: 100%;
+            transition: border-color 0.3s ease;
+        }
+        .input-field:focus, .textarea-field:focus {
+            border-color: #3b82f6;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+        }
+        .btn-submit {
+            background: linear-gradient(to right, #3b82f6, #8b5cf6);
+            color: white;
+            padding: 0.75rem;
+            border-radius: 9999px;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+        .btn-submit:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        .message {
+            transition: opacity 0.3s ease;
+        }
+        .nav-gradient {
+            background: linear-gradient(to right, #3b82f6, #8b5cf6);
+        }
+        footer {
+            flex-shrink: 0;
+            background: #1f2937;
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="nav-gradient shadow-lg p-4 fixed top-0 left-0 w-full z-10">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-white text-3xl font-bold">LibraryHub</h1>
+            <a href="index.html" class="text-white hover:text-blue-200 transition font-semibold">Back to Home</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content mt-20">
+        <div class="contact-container mt-24">
+            <h2 class="text-3xl font-bold text-gray-800 text-center mb-6">Contact Us</h2>
+            <p class="text-center text-gray-600 mb-6">We’d love to hear from you! Send us your feedback or inquiries below.</p>
+            <form id="contactForm" onsubmit="handleContactSubmit(event)">
+                <div class="mb-4">
+                    <label for="name" class="block text-gray-700 font-semibold mb-2">Name</label>
+                    <input type="text" id="name" class="input-field" placeholder="Enter your name" required>
+                    <p id="nameError" class="text-red-500 text-sm mt-1 hidden"></p>
+                </div>
+                <div class="mb-4">
+                    <label for="email" class="block text-gray-700 font-semibold mb-2">Email</label>
+                    <input type="email" id="email" class="input-field" placeholder="Enter your email" required>
+                    <p id="emailError" class="text-red-500 text-sm mt-1 hidden"></p>
+                </div>
+                <div class="mb-4">
+                    <label for="subject" class="block text-gray-700 font-semibold mb-2">Subject</label>
+                    <input type="text" id="subject" class="input-field" placeholder="Enter the subject" required>
+                    <p id="subjectError" class="text-red-500 text-sm mt-1 hidden"></p>
+                </div>
+                <div class="mb-6">
+                    <label for="message" class="block text-gray-700 font-semibold mb-2">Message</label>
+                    <textarea id="message" class="textarea-field" rows="4" placeholder="Enter your message" required></textarea>
+                    <p id="messageError" class="text-red-500 text-sm mt-1 hidden"></p>
+                </div>
+                <button type="submit" class="btn-submit">Submit</button>
+            </form>
+            <p id="feedbackMessage" class="text-center mt-4 text-gray-600 message"></p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container mx-auto">
+            <p class="text-sm">© 2025 LibraryHub. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Link to external JS file -->
+    <script src="contact.js"></script>
+</body>
+</html>
