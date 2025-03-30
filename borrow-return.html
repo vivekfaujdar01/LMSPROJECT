@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Borrow & Return - LibraryHub</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        html, body { height: 100%; margin: 0; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .main-content { flex: 1 0 auto; padding: 1rem; }
+        .nav-gradient { background: linear-gradient(to right, #3b82f6, #8b5cf6); }
+        .card { background: white; border-radius: 1rem; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 1rem; }
+        .btn-action {
+            background: linear-gradient(to right, #3b82f6, #8b5cf6);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            transition: all 0.3s ease;
+            width: 100%;
+            max-width: 200px;
+        }
+        .btn-action:hover { transform: scale(1.05); box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); }
+        .table-container { max-height: 20rem; overflow-y: auto; }
+        footer { flex-shrink: 0; background: #1f2937; color: white; padding: 1rem; text-align: center; }
+
+        @media (max-width: 768px) {
+            .main-content { padding: 0.5rem; }
+            .card { padding: 0.75rem; }
+            .grid { grid-template-columns: 1fr; }
+            table { display: block; overflow-x: auto; white-space: nowrap; }
+            th, td { padding: 0.5rem; font-size: 0.875rem; }
+            .btn-action { font-size: 0.875rem; }
+            #nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: linear-gradient(to right, #3b82f6, #8b5cf6);
+                padding: 1rem;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+            #nav-links.active { display: flex; }
+        }
+        @media (max-width: 480px) {
+            h2 { font-size: 1.5rem; }
+            input, select { font-size: 0.875rem; padding: 0.5rem; }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="nav-gradient shadow-lg p-4 fixed top-0 left-0 w-full z-10">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-white text-3xl font-bold">LibraryHub</h1>
+            <div class="md:hidden">
+                <button onclick="toggleMenu()" class="text-white focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                    </svg>
+                </button>
+            </div>
+            <div id="nav-links" class="space-x-6 md:flex md:items-center">
+                <!-- Navbar populated by script.js -->
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-content mt-20 container mx-auto">
+        <h2 class="text-4xl font-bold text-gray-800 mb-8 text-center">Borrow & Return</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Issue Book Section -->
+            <div class="card">
+                <h3 class="text-xl font-semibold text-gray-800 mb-4">Issue Book</h3>
+                <form id="issueForm" onsubmit="issueBook(event)">
+                    <div class="mb-4">
+                        <label for="issueBookTitle" class="block text-gray-700 font-semibold mb-2">Book Title</label>
+                        <select id="issueBookTitle" class="w-full p-2 border rounded" required>
+                            <option value="">Select a book</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="issueMember" class="block text-gray-700 font-semibold mb-2">Member</label>
+                        <input type="text" id="issueMember" class="w-full p-2 border rounded" placeholder="Enter member name" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="dueDate" class="block text-gray-700 font-semibold mb-2">Due Date</label>
+                        <input type="date" id="dueDate" class="w-full p-2 border rounded" required>
+                    </div>
+                    <button type="submit" class="btn-action mx-auto">Issue Book</button>
+                </form>
+            </div>
+
+            <!-- Borrowed Books Section -->
+            <div class="card">
+                <h3 class="text-xl font-semibold text-gray-800 mb-4">Borrowed Books</h3>
+                <div class="table-container">
+                    <table class="w-full text-left text-gray-800">
+                        <thead>
+                            <tr>
+                                <th class="py-2">Book Title</th>
+                                <th>Member</th>
+                                <th>Due Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="borrowedBooksTable">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p class="text-sm">© 2025 LibraryHub. All rights reserved.</p>
+    </footer>
+
+    <script src="./script.js"></script>
+    <script>
+        function loadBorrowReturnPage() {
+            if (!user.isLoggedIn || (user.role !== 'librarian' && user.role !== 'admin')) {
+                alert("Access denied. Only librarians and admins can manage borrowing and returning.");
+                window.location.href = "index.html";
+                return;
+            }
+
+            const bookSelect = document.getElementById('issueBookTitle');
+            const availableBooks = books.filter(b => b.available);
+            bookSelect.innerHTML = '<option value="">Select a book</option>' + 
+                availableBooks.map(b => `<option value="${b.isbn}">${b.title}</option>`).join('');
+
+            const borrowedTable = document.getElementById('borrowedBooksTable');
+            borrowedTable.innerHTML = '';
+            borrowedBooks.forEach(b => {
+                const book = books.find(book => book.isbn === b.isbn);
+                if (book) {
+                    borrowedTable.innerHTML += `
+                        <tr>
+                            <td class="py-2">${book.title}</td>
+                            <td>${b.memberId}</td>
+                            <td>${b.dueDate}</td>
+                            <td><button onclick="returnBook('${b.isbn}', '${b.memberId}')" class="text-blue-600 hover:underline">Return</button></td>
+                        </tr>
+                    `;
+                }
+            });
+        }
+
+        function issueBook(event) {
+            event.preventDefault();
+            const isbn = document.getElementById('issueBookTitle').value;
+            const member = document.getElementById('issueMember').value;
+            const dueDate = document.getElementById('dueDate').value;
+
+            const book = books.find(b => b.isbn === isbn);
+            if (!book || !book.available) {
+                alert("Book is not available!");
+                return;
+            }
+
+            book.available = false;
+            borrowedBooks.push({ isbn, memberId: member, dueDate });
+            localStorage.setItem('borrowedBooks', JSON.stringify(borrowedBooks));
+
+            const today = new Date().toISOString().split('T')[0];
+            addTransaction(book.title, member, "Issued", today);
+            addDueBook(book.title, member, dueDate);
+
+            alert(`${book.title} issued to ${member} successfully!`);
+            loadBorrowReturnPage();
+        }
+
+        function returnBook(isbn, memberId) {
+            const book = books.find(b => b.isbn === isbn);
+            if (!book) return;
+
+            book.available = true;
+            borrowedBooks = borrowedBooks.filter(b => b.isbn !== isbn || b.memberId !== memberId);
+            localStorage.setItem('borrowedBooks', JSON.stringify(borrowedBooks));
+
+            const today = new Date().toISOString().split('T')[0];
+            addTransaction(book.title, memberId, "Returned", today);
+            removeDueBook(book.title, memberId);
+
+            alert(`${book.title} returned successfully!`);
+            loadBorrowReturnPage();
+        }
+
+        window.addEventListener('load', () => {
+            loadUserFromLocalStorage();
+            loadBorrowReturnPage();
+        });
+    </script>
+</body>
+</html>

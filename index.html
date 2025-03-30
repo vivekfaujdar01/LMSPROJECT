@@ -3,13 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Library Management System</title>
+    <title>LibraryHub - Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
-        html, body {
-            height: 100%;
-            margin: 0;
-        }
+        html, body { height: 100%; margin: 0; }
         body {
             font-family: 'Poppins', sans-serif;
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
@@ -17,58 +14,32 @@
             flex-direction: column;
             min-height: 100vh;
         }
-        .main-content {
-            flex: 1 0 auto;
-            padding-bottom: 2rem;
-        }
-        .nav-gradient {
-            background: linear-gradient(to right, #3b82f6, #8b5cf6);
-        }
-        .genre-btn, .filter-btn {
-            transition: all 0.3s ease;
-            background: white;
-            border-radius: 1rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        .genre-btn:hover, .filter-btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        .main-content { flex: 1 0 auto; padding: 1rem; }
+        .nav-gradient { background: linear-gradient(to right, #3b82f6, #8b5cf6); }
+        .card { background: white; border-radius: 1rem; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 1rem; transition: transform 0.3s ease; }
+        .card:hover { transform: translateY(-5px); }
+        .btn-action {
             background: linear-gradient(to right, #3b82f6, #8b5cf6);
             color: white;
-        }
-        .book-card {
-            transition: all 0.3s ease;
-            background: white;
-            border-radius: 1rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        .book-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-            border: 2px solid #3b82f6;
-        }
-        .borrow-btn {
-            background: linear-gradient(to right, #3b82f6, #8b5cf6);
-            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
             border-radius: 9999px;
-        }
-        .borrow-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-        footer {
-            flex-shrink: 0;
-            background: #1f2937;
-        }
-        #nav-links {
             transition: all 0.3s ease;
+            width: 100%;
+            max-width: 200px;
         }
+        .btn-action:hover { transform: scale(1.05); box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); }
+        .table-container { max-height: 20rem; overflow-y: auto; }
+        footer { flex-shrink: 0; background: #1f2937; color: white; padding: 1rem; text-align: center; }
+
         @media (max-width: 768px) {
+            .main-content { padding: 0.5rem; }
+            .card { padding: 0.75rem; }
+            .grid { grid-template-columns: 1fr; }
+            .table-container table { display: block; overflow-x: auto; white-space: nowrap; width: 100%; }
+            .table-container th, .table-container td { min-width: 100px; padding: 0.5rem; font-size: 0.875rem; }
+            .btn-action { font-size: 0.875rem; }
             #nav-links {
                 display: none;
-            }
-            #nav-links.active {
-                display: flex;
                 flex-direction: column;
                 position: absolute;
                 top: 100%;
@@ -78,27 +49,12 @@
                 padding: 1rem;
                 box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             }
-            .genre-btn, .filter-btn {
-                width: 100%;
-            }
+            #nav-links.active { display: flex; }
         }
-        #bookModal, #profileModal {
-            padding: 1rem;
-        }
-        #bookModal > div, #profileModal > div {
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-        .profile-icon {
-            width: 2rem;
-            height: 2rem;
-            border-radius: 50%;
-            background: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            color: #3b82f6;
+        @media (max-width: 480px) {
+            h2 { font-size: 1.5rem; }
+            h3 { font-size: 1.25rem; }
+            input { font-size: 0.875rem; padding: 0.5rem; }
         }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
@@ -116,88 +72,173 @@
                 </button>
             </div>
             <div id="nav-links" class="space-x-6 md:flex md:items-center">
-                <a href="#" class="text-white hover:text-blue-200 transition font-semibold block md:inline-block py-2 md:py-0" onclick="showAllBooks()">Home</a>
-                <a href="#" class="text-white hover:text-blue-200 transition font-semibold block md:inline-block py-2 md:py-0" onclick="showMyBooks()">My Books</a>
-                <a href="#" class="text-white hover:text-blue-200 transition font-semibold block md:inline-block py-2 md:py-0">About</a>
-                <a href="./contact.html" class="text-white hover:text-blue-200 transition font-semibold block md:inline-block py-2 md:py-0">Contact</a>
-                <a href="./login.html" class="text-white hover:text-blue-200 transition font-semibold block md:inline-block py-2 md:py-0">Login</a>
-                <!-- <div id="profile-link" class="text-white hover:text-blue-200 transition font-semibold block md:inline-block py-2 md:py-0"></div> -->
+                <a href="index.html" class="text-white hover:text-blue-200 transition font-semibold block md:inline-block py-2 md:py-0">Dashboard</a>
+                <a href="books.html" class="text-white hover:text-blue-200 transition font-semibold block md:inline-block py-2 md:py-0">Book Management</a>
+                <a href="search.html" class="text-white hover:text-blue-200 transition font-semibold block md:inline-block py-2 md:py-0">Search & Browse</a>
+                <a href="members.html" class="text-white hover:text-blue-200 transition font-semibold block md:inline-block py-2 md:py-0">Member Management</a>
+                <a href="borrow-return.html" class="text-white hover:text-blue-200 transition font-semibold block md:inline-block py-2 md:py-0">Borrow & Return</a>
+                <a href="reports.html" class="text-white hover:text-blue-200 transition font-semibold block md:inline-block py-2 md:py-0">Reports</a>
+                <a href="contact.html" class="text-white hover:text-blue-200 transition font-semibold block md:inline-block py-2 md:py-0">Contact</a>
+                <div id="profile-link" class="text-white hover:text-blue-200 transition font-semibold block md:inline-block py-2 md:py-0"></div>
                 <div id="signup-link" class="text-white bg-blue-600 px-4 py-2 rounded-full hover:bg-blue-700 transition font-semibold block md:inline-block">
-                    <a href="./signup.html">Signup</a>
+                    <a href="signup.html">Signup</a>
                 </div>
             </div>
         </div>
     </nav>
 
     <!-- Main Content -->
-    <div class="main-content">
-        <div class="container mx-auto mt-24 px-4 md:px-6">
-            <h2 class="text-4xl font-bold mb-8 text-center text-gray-800">Explore by Genre</h2>
-            <div class="flex justify-center mb-10">
-                <input type="text" id="searchInput" placeholder="Search books by title, author, or genre..." class="w-full max-w-2xl p-4 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-600 bg-white border border-gray-200" onkeyup="searchBooks()">
-            </div>
-            <div class="flex justify-center mb-12">
-                <div class="genre-btn p-6 text-center cursor-pointer w-full max-w-xs">
-                    <h3 class="text-2xl font-bold text-gray-800" onclick="showAllBooks()">Show All Books</h3>
+    <div class="main-content mt-20 container mx-auto">
+        <h2 class="text-4xl font-bold text-gray-800 mb-8 text-center">Dashboard</h2>
+
+        <!-- Overview Section (Admins & Librarians) -->
+        <div id="admin-dashboard" class="hidden mb-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div class="card">
+                    <h3 class="text-xl font-semibold text-gray-800">Total Books</h3>
+                    <p id="total-books" class="text-3xl font-bold text-blue-600 mt-2">0</p>
+                </div>
+                <div class="card">
+                    <h3 class="text-xl font-semibold text-gray-800">Issued Books</h3>
+                    <p id="issued-books" class="text-3xl font-bold text-blue-600 mt-2">0</p>
+                </div>
+                <div class="card">
+                    <h3 class="text-xl font-semibold text-gray-800">Available Books</h3>
+                    <p id="available-books" class="text-3xl font-bold text-blue-600 mt-2">0</p>
+                </div>
+                <div class="card">
+                    <h3 class="text-xl font-semibold text-gray-800">Members</h3>
+                    <p id="total-members" class="text-3xl font-bold text-blue-600 mt-2">0</p>
                 </div>
             </div>
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 mb-12">
-                <div class="genre-btn p-6 text-center cursor-pointer" onclick="showBooks('Fantasy')"><h3 class="text-xl font-semibold">Fantasy</h3></div>
-                <div class="genre-btn p-6 text-center cursor-pointer" onclick="showBooks('Science Fiction')"><h3 class="text-xl font-semibold">Science Fiction</h3></div>
-                <div class="genre-btn p-6 text-center cursor-pointer" onclick="showBooks('Dystopian')"><h3 class="text-xl font-semibold">Dystopian</h3></div>
-                <div class="genre-btn p-6 text-center cursor-pointer" onclick="showBooks('Action & Adventure')"><h3 class="text-xl font-semibold">Action & Adventure</h3></div>
-                <div class="genre-btn p-6 text-center cursor-pointer" onclick="showBooks('Detective & Mystery')"><h3 class="text-xl font-semibold">Detective & Mystery</h3></div>
-                <div class="genre-btn p-6 text-center cursor-pointer" onclick="showBooks('Thriller & Suspense')"><h3 class="text-xl font-semibold">Thriller & Suspense</h3></div>
-                <div class="genre-btn p-6 text-center cursor-pointer" onclick="showBooks('Romance')"><h3 class="text-xl font-semibold">Romance</h3></div>
-                <div class="genre-btn p-6 text-center cursor-pointer" onclick="showBooks('Horror')"><h3 class="text-xl font-semibold">Horror</h3></div>
-                <div class="genre-btn p-6 text-center cursor-pointer" onclick="showBooks('Historical Fiction')"><h3 class="text-xl font-semibold">Historical Fiction</h3></div>
-                <div class="genre-btn p-6 text-center cursor-pointer" onclick="showBooks('Young Adult')"><h3 class="text-xl font-semibold">Young Adult</h3></div>
-                <div class="genre-btn p-6 text-center cursor-pointer" onclick="showBooks('Children’s Fiction')"><h3 class="text-xl font-semibold">Children’s Fiction</h3></div>
-            </div>
+
+            <!-- Quick Actions -->
             <div class="flex flex-wrap justify-center gap-4 mb-12">
-                <button class="filter-btn bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700" onclick="filterBooks('all')">All Books</button>
-                <button class="filter-btn bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700" onclick="filterBooks('popular')">Most Popular</button>
-                <button class="filter-btn bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700" onclick="filterBooks('new')">New Arrivals</button>
+                <button class="btn-action" onclick="window.location.href='books.html'">Add Book</button>
+                <button class="btn-action" onclick="window.location.href='members.html'">Add Member</button>
+                <button class="btn-action" onclick="window.location.href='borrow-return.html'">Issue Book</button>
             </div>
-            <div class="mt-12">
-                <h2 class="text-4xl font-bold mb-8 text-center text-gray-800">Available Books</h2>
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8" id="book-list"></div>
+
+            <!-- Recent Transactions -->
+            <div class="card mb-8">
+                <h3 class="text-xl font-semibold text-gray-800 mb-4">Recent Transactions</h3>
+                <div class="table-container">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="text-gray-600">
+                                <th class="pb-2">Book Title</th>
+                                <th class="pb-2">Member</th>
+                                <th class="pb-2">Action</th>
+                                <th class="pb-2">Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recent-transactions" class="text-gray-800"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Due Date Alerts -->
+            <div class="card mb-8">
+                <h3 class="text-xl font-semibold text-gray-800 mb-4">Due Date Alerts</h3>
+                <div class="table-container">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="text-gray-600">
+                                <th class="pb-2">Book Title</th>
+                                <th class="pb-2">Member</th>
+                                <th class="pb-2">Due Date</th>
+                                <th class="pb-2">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="due-alerts" class="text-gray-800"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- All Books -->
+            <div class="card">
+                <h3 class="text-xl font-semibold text-gray-800 mb-4">All Books</h3>
+                <div class="table-container">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="text-gray-600">
+                                <th class="pb-2">Title</th>
+                                <th class="pb-2">Author</th>
+                                <th class="pb-2">ISBN</th>
+                                <th class="pb-2">Category</th>
+                                <th class="pb-2">Available</th>
+                            </tr>
+                        </thead>
+                        <tbody id="all-books-table" class="text-gray-800"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- Book Details Modal -->
-    <div id="bookModal" class=" fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="bg-white rounded-xl p-8 max-w-lg w-full shadow-lg">
-            <h3 id="modalTitle" class="text-2xl font-bold text-gray-800"></h3>
-            <p id="modalAuthor" class="text-gray-600 mt-2"></p>
-            <p id="modalGenre" class="text-gray-600"></p>
-            <p id="modalDescription" class="text-gray-600 mt-4"></p>
-            <button class="bg-blue-600 text-white rounded-full px-4 py-2 mt-6 w-full hover:bg-blue-700" onclick="closeModal()">Close</button>
+        <!-- User Dashboard -->
+        <div id="user-dashboard" class="hidden">
+            <!-- Quick Search -->
+            <div class="card mb-8">
+                <h3 class="text-xl font-semibold text-gray-800 mb-4">Search Books</h3>
+                <input type="text" id="quick-search" class="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-600" placeholder="Search by title, author, or ISBN..." onkeyup="quickSearch()">
+            </div>
+
+            <!-- Borrowed Books -->
+            <div class="card mb-8">
+                <h3 class="text-xl font-semibold text-gray-800 mb-4">Borrowed Books</h3>
+                <div class="table-container">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="text-gray-600">
+                                <th class="pb-2">Title</th>
+                                <th class="pb-2">Author</th>
+                                <th class="pb-2">Due Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="borrowed-books" class="text-gray-800"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Wishlist -->
+            <div class="card">
+                <h3 class="text-xl font-semibold text-gray-800 mb-4">Wishlist</h3>
+                <div id="wishlist" class="text-gray-800"></div>
+            </div>
         </div>
     </div>
 
     <!-- Profile Modal -->
-    <div id="profileModal" class=" fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="bg-white rounded-xl p-8 max-w-lg w-full shadow-lg">
+    <div id="profileModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="card max-w-lg w-full">
             <h3 class="text-2xl font-bold text-gray-800 mb-4">User Profile</h3>
             <p id="profileUsername" class="text-gray-800 mb-2"></p>
             <p id="profileEmail" class="text-gray-800 mb-4"></p>
-            <h4 class="text-xl font-semibold text-gray-800 mb-2">Borrowed Books</h4>
-            <ul id="profileBorrowedBooks" class="list-disc pl-5 mb-4"></ul>
-            <button class="bg-red-600 text-white rounded-full px-4 py-2 w-full hover:bg-red-700" onclick="logoutUser()">Logout</button>
-            <button class="bg-blue-600 text-white rounded-full px-4 py-2 mt-2 w-full hover:bg-blue-700" onclick="closeProfile()">Close</button>
+            <h4 class="text-xl font-semibold text-gray-800 mb-2">Current Borrowed Books</h4>
+            <div class="table-container mb-4">
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="text-gray-600">
+                            <th>Title</th>
+                            <th>Due Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="profileBorrowedBooks" class="text-gray-800"></tbody>
+                </table>
+            </div>
+            <h4 class="text-xl font-semibold text-gray-800 mb-2">Reading History</h4>
+            <div id="readingHistory" class="text-gray-800 mb-4"></div>
+            <button class="btn-action w-full" onclick="closeProfile()">Close</button>
         </div>
     </div>
 
     <!-- Footer -->
-    <footer class="bg-gray-800 p-6">
-        <div class="container mx-auto text-center text-white">
-            <p class="text-sm">LibraryHub</p>
+    <footer>
+        <div class="container mx-auto">
+            <p class="text-sm">© 2025 LibraryHub. All rights reserved.</p>
         </div>
     </footer>
 
-    <!-- Link to external JS file -->
-    <script src="script2.js"></script>
+    <script src="./script.js"></script>
 </body>
 </html>

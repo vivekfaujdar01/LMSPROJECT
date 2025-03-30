@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - LibraryHub</title>
+    <title>Member Management - LibraryHub</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
         html, body { height: 100%; margin: 0; }
@@ -27,11 +27,15 @@
             max-width: 200px;
         }
         .btn-action:hover { transform: scale(1.05); box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); }
+        .table-container { max-height: 20rem; overflow-y: auto; }
         footer { flex-shrink: 0; background: #1f2937; color: white; padding: 1rem; text-align: center; }
 
         @media (max-width: 768px) {
             .main-content { padding: 0.5rem; }
             .card { padding: 0.75rem; }
+            .grid { grid-template-columns: 1fr; }
+            .table-container table { display: block; overflow-x: auto; white-space: nowrap; width: 100%; }
+            th, td { padding: 0.5rem; font-size: 0.875rem; min-width: 80px; }
             .btn-action { font-size: 0.875rem; }
             #nav-links {
                 display: none;
@@ -48,6 +52,7 @@
         }
         @media (max-width: 480px) {
             h2 { font-size: 1.5rem; }
+            h3 { font-size: 1.25rem; }
             input, select { font-size: 0.875rem; padding: 0.5rem; }
         }
     </style>
@@ -81,21 +86,41 @@
     </nav>
 
     <div class="main-content mt-20 container mx-auto">
-        <h2 class="text-4xl font-bold text-gray-800 mb-8 text-center">Login</h2>
-        <div class="max-w-md mx-auto">
-            <div class="card">
-                <form id="loginForm" onsubmit="handleLogin(event)">
-                    <div class="mb-4">
-                        <label for="email" class="block text-gray-700 font-semibold mb-2">Email</label>
-                        <input type="email" id="email" class="w-full p-2 border rounded" required>
-                    </div>
-                    <div class="mb-4">
-                        <label for="password" class="block text-gray-700 font-semibold mb-2">Password</label>
-                        <input type="password" id="password" class="w-full p-2 border rounded" required>
-                    </div>
-                    <button type="submit" class="btn-action mx-auto">Login</button>
-                </form>
-                <p class="text-center mt-4">Don't have an account? <a href="signup.html" class="text-blue-600 hover:underline">Sign Up</a></p>
+        <h2 class="text-4xl font-bold text-gray-800 mb-8 text-center">Member Management</h2>
+        <div class="card mb-8">
+            <h3 class="text-xl font-semibold text-gray-800 mb-4">Add New Member</h3>
+            <form id="addMemberForm" onsubmit="addMember(event)">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <input type="text" id="memberId" class="p-2 border rounded" placeholder="Member ID" required>
+                    <input type="text" id="memberName" class="p-2 border rounded" placeholder="Name" required>
+                    <input type="email" id="memberEmail" class="p-2 border rounded" placeholder="Email" required>
+                    <select id="memberRole" class="p-2 border rounded">
+                        <option value="student">Student</option>
+                        <option value="staff">Staff</option>
+                        <option value="librarian">Librarian</option>
+                    </select>
+                    <input type="date" id="memberExpiry" class="p-2 border rounded" required>
+                </div>
+                <button type="submit" class="btn-action mt-4">Add Member</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <h3 class="text-xl font-semibold text-gray-800 mb-4">Member List</h3>
+            <div class="table-container">
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="text-gray-600">
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Expiry</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="memberList" class="text-gray-800"></tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -105,5 +130,6 @@
     </footer>
 
     <script src="./script.js"></script>
+    <script src="./members.js"></script>
 </body>
 </html>

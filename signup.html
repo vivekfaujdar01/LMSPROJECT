@@ -6,95 +6,116 @@
     <title>Signup - LibraryHub</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
+        html, body { height: 100%; margin: 0; }
         body {
             font-family: 'Poppins', sans-serif;
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            min-height: 100vh;
             display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 0;
+            flex-direction: column;
+            min-height: 100vh;
         }
-        .signup-container {
-            background: white;
-            border-radius: 1rem;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-            padding: 2rem;
-            width: 100%;
-            max-width: 28rem;
-            transition: transform 0.3s ease;
-        }
-        .signup-container:hover {
-            transform: translateY(-5px);
-        }
-        .input-field {
-            border: 2px solid #e5e7eb;
-            border-radius: 0.5rem;
-            padding: 0.75rem;
-            width: 100%;
-            transition: border-color 0.3s ease;
-        }
-        .input-field:focus {
-            border-color: #3b82f6;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
-        }
-        .btn-signup {
+        .main-content { flex: 1 0 auto; padding: 1rem; }
+        .nav-gradient { background: linear-gradient(to right, #3b82f6, #8b5cf6); }
+        .card { background: white; border-radius: 1rem; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 1rem; }
+        .btn-action {
             background: linear-gradient(to right, #3b82f6, #8b5cf6);
             color: white;
-            padding: 0.75rem;
+            padding: 0.5rem 1rem;
             border-radius: 9999px;
-            width: 100%;
             transition: all 0.3s ease;
+            width: 100%;
+            max-width: 200px;
         }
-        .btn-signup:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        .btn-action:hover { transform: scale(1.05); box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); }
+        footer { flex-shrink: 0; background: #1f2937; color: white; padding: 1rem; text-align: center; }
+
+        @media (max-width: 768px) {
+            .main-content { padding: 0.5rem; }
+            .card { padding: 0.75rem; }
+            .btn-action { font-size: 0.875rem; }
+            #nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: linear-gradient(to right, #3b82f6, #8b5cf6);
+                padding: 1rem;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+            #nav-links.active { display: flex; }
         }
-        .message {
-            transition: opacity 0.3s ease;
-        }
-        .nav-gradient {
-            background: linear-gradient(to right, #3b82f6, #8b5cf6);
+        @media (max-width: 480px) {
+            h2 { font-size: 1.5rem; }
+            input, select { font-size: 0.875rem; padding: 0.5rem; }
         }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Navigation Bar -->
     <nav class="nav-gradient shadow-lg p-4 fixed top-0 left-0 w-full z-10">
         <div class="container mx-auto flex justify-between items-center">
             <h1 class="text-white text-3xl font-bold">LibraryHub</h1>
-            <a href="index.html" class="text-white hover:text-blue-200 transition font-semibold">Back to Home</a>
+            <div class="md:hidden">
+                <button onclick="toggleMenu()" class="text-white focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                    </svg>
+                </button>
+            </div>
+            <div id="nav-links" class="space-x-6 md:flex md:items-center">
+                <a href="index.html" class="text-white hover:text-blue-200 transition font-semibold block md:inline-block py-2 md:py-0">Dashboard</a>
+                <a href="books.html" class="text-white hover:text-blue-200 transition font-semibold block md:inline-block py-2 md:py-0">Book Management</a>
+                <a href="search.html" class="text-white hover:text-blue-200 transition font-semibold block md:inline-block py-2 md:py-0">Search & Browse</a>
+                <a href="members.html" class="text-white hover:text-blue-200 transition font-semibold block md:inline-block py-2 md:py-0">Member Management</a>
+                <a href="borrow-return.html" class="text-white hover:text-blue-200 transition font-semibold block md:inline-block py-2 md:py-0">Borrow & Return</a>
+                <a href="reports.html" class="text-white hover:text-blue-200 transition font-semibold block md:inline-block py-2 md:py-0">Reports</a>
+                <a href="contact.html" class="text-white hover:text-blue-200 transition font-semibold block md:inline-block py-2 md:py-0">Contact</a>
+                <div id="profile-link" class="text-white hover:text-blue-200 transition font-semibold block md:inline-block py-2 md:py-0"></div>
+                <div id="signup-link" class="text-white bg-blue-600 px-4 py-2 rounded-full hover:bg-blue-700 transition font-semibold block md:inline-block">
+                    <a href="signup.html">Signup</a>
+                </div>
+            </div>
         </div>
     </nav>
 
-    <!-- Signup Form -->
-    <div class="signup-container mt-24">
-        <h2 class="text-3xl font-bold text-gray-800 text-center mb-6">Create Your Account</h2>
-        <form id="signupForm" onsubmit="handleSignup(event)">
-            <div class="mb-4">
-                <label for="username" class="block text-gray-700 font-semibold mb-2">Username</label>
-                <input type="text" id="username" class="input-field" placeholder="Enter your username" required>
-                <p id="usernameError" class="text-red-500 text-sm mt-1 hidden"></p>
+    <div class="main-content mt-20 container mx-auto">
+        <h2 class="text-4xl font-bold text-gray-800 mb-8 text-center">Sign Up</h2>
+        <div class="max-w-md mx-auto">
+            <div class="card">
+                <form id="signupForm" onsubmit="handleSignup(event)">
+                    <div class="mb-4">
+                        <label for="username" class="block text-gray-700 font-semibold mb-2">Username</label>
+                        <input type="text" id="username" class="w-full p-2 border rounded" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="email" class="block text-gray-700 font-semibold mb-2">Email</label>
+                        <input type="email" id="email" class="w-full p-2 border rounded" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="password" class="block text-gray-700 font-semibold mb-2">Password</label>
+                        <input type="password" id="password" class="w-full p-2 border rounded" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="role" class="block text-gray-700 font-semibold mb-2">Role</label>
+                        <select id="role" class="w-full p-2 border rounded" required>
+                            <option value="student">Student</option>
+                            <option value="librarian">Librarian</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-action mx-auto">Sign Up</button>
+                </form>
+                <p class="text-center mt-4">Already have an account? <a href="login.html" class="text-blue-600 hover:underline">Login</a></p>
             </div>
-            <div class="mb-4">
-                <label for="email" class="block text-gray-700 font-semibold mb-2">Email</label>
-                <input type="email" id="email" class="input-field" placeholder="Enter your email" required>
-                <p id="emailError" class="text-red-500 text-sm mt-1 hidden"></p>
-            </div>
-            <div class="mb-6">
-                <label for="password" class="block text-gray-700 font-semibold mb-2">Password</label>
-                <input type="password" id="password" class="input-field" placeholder="Enter your password" required>
-                <p id="passwordError" class="text-red-500 text-sm mt-1 hidden"></p>
-            </div>
-            <button type="submit" class="btn-signup">Sign Up</button>
-        </form>
-        <p id="message" class="text-center mt-4 text-gray-600 message"></p>
-        <p class="text-center mt-4 text-gray-600">Already have an account? <a href="login.html" class="text-blue-600 hover:underline">Log in</a></p>
+        </div>
     </div>
 
-    <!-- Link to external JS file -->
-    <script src="./signup.js"></script>
+    <footer>
+        <p class="text-sm">© 2025 LibraryHub. All rights reserved.</p>
+    </footer>
+
+    <script src="./script.js"></script>
 </body>
 </html>

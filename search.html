@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - LibraryHub</title>
+    <title>Search & Browse - LibraryHub</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
         html, body { height: 100%; margin: 0; }
@@ -32,6 +32,7 @@
         @media (max-width: 768px) {
             .main-content { padding: 0.5rem; }
             .card { padding: 0.75rem; }
+            .grid { grid-template-columns: 1fr; }
             .btn-action { font-size: 0.875rem; }
             #nav-links {
                 display: none;
@@ -48,6 +49,7 @@
         }
         @media (max-width: 480px) {
             h2 { font-size: 1.5rem; }
+            h3 { font-size: 1.25rem; }
             input, select { font-size: 0.875rem; padding: 0.5rem; }
         }
     </style>
@@ -81,23 +83,19 @@
     </nav>
 
     <div class="main-content mt-20 container mx-auto">
-        <h2 class="text-4xl font-bold text-gray-800 mb-8 text-center">Login</h2>
-        <div class="max-w-md mx-auto">
-            <div class="card">
-                <form id="loginForm" onsubmit="handleLogin(event)">
-                    <div class="mb-4">
-                        <label for="email" class="block text-gray-700 font-semibold mb-2">Email</label>
-                        <input type="email" id="email" class="w-full p-2 border rounded" required>
-                    </div>
-                    <div class="mb-4">
-                        <label for="password" class="block text-gray-700 font-semibold mb-2">Password</label>
-                        <input type="password" id="password" class="w-full p-2 border rounded" required>
-                    </div>
-                    <button type="submit" class="btn-action mx-auto">Login</button>
-                </form>
-                <p class="text-center mt-4">Don't have an account? <a href="signup.html" class="text-blue-600 hover:underline">Sign Up</a></p>
-            </div>
+        <h2 class="text-4xl font-bold text-gray-800 mb-8 text-center">Search & Browse Books</h2>
+        <div class="flex flex-col md:flex-row gap-4 mb-8">
+            <input type="text" id="searchQuery" class="p-2 border rounded flex-1" placeholder="Search by Title, Author, Genre, or ISBN" oninput="searchBooks()">
+            <select id="categoryFilter" class="p-2 border rounded" onchange="searchBooks()">
+                <option value="all">All Categories</option>
+            </select>
+            <select id="sortFilter" class="p-2 border rounded" onchange="searchBooks()">
+                <option value="default">All Books</option>
+                <option value="popular">Popular</option>
+                <option value="new">New Arrivals</option>
+            </select>
         </div>
+        <div id="bookList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
     </div>
 
     <footer>
@@ -105,5 +103,6 @@
     </footer>
 
     <script src="./script.js"></script>
+    <script src="./search.js"></script>
 </body>
 </html>
