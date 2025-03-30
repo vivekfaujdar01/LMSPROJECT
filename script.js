@@ -128,8 +128,6 @@ function updateNavbar() {
         let navHTML = `
             <a href="index.html" class="text-white hover:text-blue-200 transition font-semibold block md:inline-block py-2 md:py-0">Dashboard</a>
             <a href="search.html" class="text-white hover:text-blue-200 transition font-semibold block md:inline-block py-2 md:py-0">Search & Browse</a>
-            <a href="reports.html" class="text-white hover:text-blue-200 transition font-semibold block md:inline-block py-2 md:py-0">Reports</a>
-            <a href="contact.html" class="text-white hover:text-blue-200 transition font-semibold block md:inline-block py-2 md:py-0">Contact</a>
         `;
         if (user.role === 'admin') {
             navHTML += `
@@ -142,7 +140,9 @@ function updateNavbar() {
                 <a href="borrow-return.html" class="text-white hover:text-blue-200 transition font-semibold block md:inline-block py-2 md:py-0">Borrow & Return</a>
             `;
         }
-        navLinks.innerHTML = navHTML + `
+        navHTML += `
+            <a href="reports.html" class="text-white hover:text-blue-200 transition font-semibold block md:inline-block py-2 md:py-0">Reports</a>
+            <a href="contact.html" class="text-white hover:text-blue-200 transition font-semibold block md:inline-block py-2 md:py-0">Contact</a>
             <div class="flex items-center space-x-2">
                 <div class="flex items-center space-x-2 cursor-pointer" onclick="showProfile()">
                     <div class="w-8 h-8 rounded-full bg-white flex items-center justify-center font-bold text-blue-600">${user.username[0].toUpperCase()}</div>
@@ -151,6 +151,7 @@ function updateNavbar() {
                 <button onclick="logout()" class="text-white hover:text-blue-200 transition font-semibold">Logout</button>
             </div>
         `;
+        navLinks.innerHTML = navHTML;
     } else {
         navLinks.innerHTML = `
             <a href="index.html" class="text-white hover:text-blue-200 transition font-semibold block md:inline-block py-2 md:py-0">Dashboard</a>
